@@ -19,9 +19,9 @@ knitr::opts_chunk$set(echo = TRUE)
 `Lawmakers Than Men? American Journal of Political Science, 57(2), 326–341.`
 `http://doi.org/10.1111/ajps.12010`
 
-The paper builds on previous research about the consensus-seeking nature of women lawmakers in the US Congress and investigates how effective it is in different institutional settings. The authors primarily consider two such settings:
-* Women in the Majority Party
-* Women in the Minority Party
+The paper builds on previous research about the consensus-seeking nature of women lawmakers in the US Congress and investigates how effective that trait is in different institutional settings. The authors primarily consider two such settings:
+1. Women in the Majority Party
+2. Women in the Minority Party
 Upfront, the authors argue that in the minority party, women lawmakers are more effective at bringing about new policies than men owing to their known propensity to build coalitions. Through collection and analysis of data on the proceedings of Congress from 1973 to 2008, the authors report strong evidence to support their argument.
 
 The authors also argue that majority party women too are successful at keeping their legislative proposals alive for longer, but the effects of their consensus-building inclination are less pronounced in the majority party.
@@ -84,9 +84,80 @@ summary(m4)
 ##Published Models
 ![](img/ReportedModelCoefficients.png)
 
-#Plots
+#Model analysis: my assessment
+As the summary table for Model 1 shows, being a `female` *alone* has a significant bearing on the legislative effectiveness score (LES) of a legislator. And since the regression coefficient or beta for `female` is positive, the authors' argument that female members are more effective than their male counterparts is supported by the model. For Model 2, however, although the positive contribution of women being in the minority party is not strictly significant (a p-value of 0.06), but it is arguably close enough to the standard alpha level of 0.05. 
+
+On the whole, r-squared for both models 1&2 are close to the mid-way mark. So I would not assert a lot of confidence in the fit of the model. i.e., in my opinion the predictive value of the two models is questionable at best.
+
+Comparing models 3 & 4 reveals that the effect of women in minority party was relatively more pronounced in the 90s and the 2000s.
+
+#Plots {.tabset}
+Please click through the __tabs__ to see the code used to generate the plot, the plot itself, and the plot published in the paper.
+##Code
+```{r, eval=FALSE}
+#create a new data frame with columns that we'd need to plot the graph as in the paper
+reg.coefs <- data.frame(row.names= c("congress", "majwomen.coef", "minwomen.coef"))
+
+#this loop loops through data for each unique session of Congress one by one,
+#and creates a subset data frame 'dc' that only has the columns of interest. These 
+#columns include those that form the predictor variables in the linear models built
+#by the authors.
+for (cong in sort(unique(d$congress))) {  #sort the unique congress numbers
+  dc <- d[d$congress == cong,]   #pick out a Congress session
+  
+  #subset the data frame from previous line. The call to complete.cases() ensures that only those rows are retained that have no NAs in any of the columns specified.
+  dc <- dc[complete.cases(dc[, c(10:12, 28:39, 40:42)]),]  
+  
+  #check if the subset so obtained is empty. if so, skip to the top of the loop and look at a new Congress session
+  if (nrow(dc) == 0) {
+    next
+  }
+  
+  #create a model based on the subset, and based on the same set of predictors as Model 2 above
+  mc <- lm(data=dc, les ~ majwomen + minwomen + seniority + sensq + state_leg + state_leg_prof + majority + maj_leader + min_leader + speaker + chair + power + meddist + afam + latino + deleg_size + votepct + votepct_sq)
+  
+  #create a new record or row for the reg.coefs data frame created at the top of this section.
+  newrecord <- data.frame(congress=cong, majwomen.coef=coef(mc)[2], minwomen.coef=coef(mc)[3])
+  
+  #insert the new record into the reg.coefs data frame
+  reg.coefs <- rbind(reg.coefs, newrecord)
+}
+
+x = reg.coefs$congress #read in just the Congress session numbers into x
+ymaj = reg.coefs$majwomen.coef #read in the regression coefficient for the Women in Majority Party variable
+ymin = reg.coefs$minwomen.coef #read in the regression coefficient for the Women in Minority Party variable
+########par(oma=c(1,1,1,4))
+
+#plot the first graph: Regression Coeffs. (Women in Majority Party) Vs Congress Session
+plot(x, ymaj, type="p", pch=15, cex=1.3, ylim=c(-0.5, 1), xlab="Congress (Years 1973-2008)", ylab="LES Regression Coefficient", xaxp=c(93,111,18))
+
+#Fit a nice, smooth curve through the points rather than a jagged graph
+xspline(x, ymaj, shape=-0.4, lwd=4)
+
+#Make sure the next plot is plotted in the same plot object as the one above
+par(new=TRUE)
+
+#plot the second graph: Regression Coeffs. (Women in Minority Party) Vs Congress Session
+plot(x, ymin, type="p", pch=16, cex=1.3, ylim=c(-0.5, 1), xlab="Congress (Years 1973-2008)", ylab="LES Regression Coefficient", xaxp=c(93,111,18))
+
+#Fit a nice, smooth curve through the points rather than a jagged graph
+xspline(x, ymin, shape=-0.4, lwd=2)
+
+#create a horizontal, dashed line passing through y=0
+abline(h=0, lty=1)
+
+#create a vertical, dashed line passing through x=104
+abline(v=104, lty=2)
+
+#create a vertical, dashed line passing through x=109.5
+abline(v=109.5, lty=2)
+
+#Create a legend for the plot and place it at the top-right corner
+legend("topright", c("Minority Party Women", "Majority Party Women"), lty=c(1,1), lwd=c(2, 4), pch=c(16, 15), pt.cex=c(1.3,1.3), cex=c(0.7,0.7))
+```
+
 ##Replicated
-```{r}
+```{r, echo=FALSE}
 #create a new data frame with columns that we'd need to plot the graph as in the paper
 reg.coefs <- data.frame(row.names= c("congress", "majwomen.coef", "minwomen.coef"))
 
@@ -184,3 +255,4 @@ desc.stats
 ```
 ##Reported Stats
 ![](img/ReportedDescriptiveStatistics.png)
+
