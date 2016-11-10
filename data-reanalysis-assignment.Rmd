@@ -15,16 +15,29 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 #When Are Women More Effective Lawmakers Than Men?
+`Volden, C., Wiseman, A. E., & Wittmer, D. E. (2013). When Are Women More Effective`
+`Lawmakers Than Men? American Journal of Political Science, 57(2), 326–341.`
+`http://doi.org/10.1111/ajps.12010`
+
+The paper builds on previous research about the consensus-seeking nature of women lawmakers in the US Congress and investigates how effective it is in different institutional settings. The authors primarily consider two such settings:
+* Women in the Majority Party
+* Women in the Minority Party
+Upfront, the authors argue that in the minority party, women lawmakers are more effective at bringing about new policies than men owing to their known propensity to build coalitions. Through collection and analysis of data on the proceedings of Congress from 1973 to 2008, the authors report strong evidence to support their argument.
+
+The authors also argue that majority party women too are successful at keeping their legislative proposals alive for longer, but the effects of their consensus-building inclination are less pronounced in the majority party.
+
+To find support for these arguments, the authors report coefficients of multivariate linear regression where they treat Legislative Efficiency Score as an independent variable, and some other variables like whether a legislator is a female or male (`d$female`), whether the female legislator is in the majority party (`d$majwomen`) or in the minority party (`d$minwomen`), and seniority (`d$seniority`), etc.
+
+In this report, I am choosing to analyse 4 linear models as described in the paper. Models 3 and 4 are variations of Model 2, where the data has been split across Congress sessions for the 70s-80s, and 90s-00s. In addition, I replicate a base R plot as closely as possible. Finally I replicate the descriptive statistics (mean and sd) for the data.
 
 ##Reading in the dataset
 The dataset for this study is openly available [here](https://dataverse.harvard.edu/dataset.xhtml?persistentId=hdl:1902.1/18911) 
-in the file titled `vww_ajps_replication_data.dta`
+in the file titled `vww_ajps_replication_data.dta`. 
 
-I read in the .dta file, which is a file formatted for the Stata environment, I used the `read.dta` function from the `foreign` package as shown below.
+For the purpose of this assignment, however, I converted the .dta file (a Stata format) into a CSV file [`vww_ajps_replication_data.csv`](vww_ajps_replication_data.csv) using `write.csv` function outside of this Rmd.
 
 ```{r}
-library(foreign)
-d <- read.dta("D:\\Data\\Nitin\\UT Austin\\data analysis\\vww_ajps_replication_data.dta")
+d <- read.csv("vww_ajps_replication_data.csv")
 names(d)
 head(d)
 ```

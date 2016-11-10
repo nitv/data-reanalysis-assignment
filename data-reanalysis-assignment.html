@@ -221,12 +221,15 @@ div.tocify {
 
 <div id="when-are-women-more-effective-lawmakers-than-men" class="section level1">
 <h1><span class="header-section-number">1</span> When Are Women More Effective Lawmakers Than Men?</h1>
+<p><code>Volden, C., Wiseman, A. E., &amp; Wittmer, D. E. (2013). When Are Women More Effective</code> <code>Lawmakers Than Men? American Journal of Political Science, 57(2), 326–341.</code> <code>http://doi.org/10.1111/ajps.12010</code></p>
+<p>The paper builds on previous research about the consensus-seeking nature of women lawmakers in the US Congress and investigates how effective it is in different institutional settings. The authors primarily consider two such settings: * Women in the Majority Party * Women in the Minority Party Upfront, the authors argue that in the minority party, women lawmakers are more effective at bringing about new policies than men owing to their known propensity to build coalitions. Through collection and analysis of data on the proceedings of Congress from 1973 to 2008, the authors report strong evidence to support their argument.</p>
+<p>The authors also argue that majority party women too are successful at keeping their legislative proposals alive for longer, but the effects of their consensus-building inclination are less pronounced in the majority party.</p>
+<p>To find support for these arguments, the authors report coefficients of multivariate linear regression where they treat Legislative Efficiency Score as an independent variable, and</p>
 <div id="reading-in-the-dataset" class="section level2">
 <h2><span class="header-section-number">1.1</span> Reading in the dataset</h2>
-<p>The dataset for this study is openly available <a href="https://dataverse.harvard.edu/dataset.xhtml?persistentId=hdl:1902.1/18911">here</a> in the file titled <code>vww_ajps_replication_data.dta</code></p>
-<p>I read in the .dta file, which is a file formatted for the Stata environment, I used the <code>read.dta</code> function from the <code>foreign</code> package as shown below.</p>
-<pre class="r"><code>library(foreign)
-d &lt;- read.dta(&quot;D:\\Data\\Nitin\\UT Austin\\data analysis\\vww_ajps_replication_data.dta&quot;)
+<p>The dataset for this study is openly available <a href="https://dataverse.harvard.edu/dataset.xhtml?persistentId=hdl:1902.1/18911">here</a> in the file titled <code>vww_ajps_replication_data.dta</code>.</p>
+<p>For the purpose of this assignment, however, I converted the .dta file (a Stata format) into a CSV file <a href="vww_ajps_replication_data.csv"><code>vww_ajps_replication_data.csv</code></a> using <code>write.csv</code> function outside of this Rmd.</p>
+<pre class="r"><code>d &lt;- read.csv(&quot;vww_ajps_replication_data.csv&quot;)
 names(d)</code></pre>
 <pre><code>##  [1] &quot;thomas_num&quot;     &quot;thomas_name&quot;    &quot;id&quot;             &quot;icpsr&quot;         
 ##  [5] &quot;congress&quot;       &quot;st_name&quot;        &quot;cd&quot;             &quot;dem&quot;           
@@ -279,7 +282,7 @@ names(d)</code></pre>
 ## 5        1          0          0        0        0  0.4190     0         1
 ## 6        1          0          0        0        0  0.3570     0        16
 ##   all_aic all_abc all_pass all_law        les    leslag demwomen repwomen
-## 1       0       0        0       0 0.10957026        NA        0        0
+## 1       0       0        0       0 0.10957027        NA        0        0
 ## 2       0       0        0       0 0.18572849 0.1095703        0        0
 ## 3       1       1        1       0 0.42812765 0.1857285        0        0
 ## 4       1       1        1       0 0.31201056 0.4281276        0        0
